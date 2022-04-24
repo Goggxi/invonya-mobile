@@ -1,14 +1,14 @@
 # Invonya App
 
-- DEMO APP FOR ANDROID [download]()
+DEMO APP FOR ANDROID [download]()
 
 ## About App
 
-[x] Clean Architecture
-[x] BLoC Pattern with rxdart
-[x] Support Offline/Online Application
-[x] Bookmark News
-[x] Pagination
+- [x] Clean Architecture
+- [x] BLoC Pattern with rxdart
+- [x] Support Offline/Online Application
+- [x] Bookmark News
+- [x] Pagination
 
 ## Sources
 
