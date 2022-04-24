@@ -1,0 +1,60 @@
+name: invonya_mobile
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# APP VERSION
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.16.2 <3.0.0"
+
+dependencies:
+  flutter_localizations:
+    sdk: flutter
+  flutter:
+    sdk: flutter
+
+  # Icon
+  cupertino_icons: ^1.0.2
+
+  # Value Entity & Format
+  equatable: ^2.0.3 
+  intl: ^0.17.0
+  timeago: ^3.2.2
+
+  # Http CLient
+  dio: ^4.0.6
+
+  # Service Locator
+  get_it: ^7.2.0
+
+  # Reactive Programing
+  rxdart: ^0.27.3
+
+  # Functional Programing
+  dartz: ^0.10.1 
+
+  # image
+  cached_network_image: ^3.2.0
+  flutter_svg: ^1.0.3
+  photo_view: ^0.13.0
+
+  # Another
+  flutter_dotenv: ^5.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^1.0.0
+
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - .env
+    # - assets/images/
+    # - assets/animations/
