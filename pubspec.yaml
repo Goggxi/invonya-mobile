@@ -43,6 +43,12 @@ dependencies:
   # Another
   flutter_dotenv: ^5.0.2
 
+  # Fork 
+  data_connection_checker:
+      git:
+        url: https://github.com/Goggxi/data_connection_checker.git
+        ref: master
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
