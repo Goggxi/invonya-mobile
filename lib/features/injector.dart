@@ -7,31 +7,28 @@ import 'package:invonya_mobile/features/data/datasources/article/article_remote.
 import 'package:invonya_mobile/features/data/repositories/article_repository_impl.dart';
 import 'package:invonya_mobile/features/domain/repositories/article_repositoty.dart';
 import 'package:invonya_mobile/features/domain/usecases/get_article_topheadlines.dart';
-import 'package:invonya_mobile/features/presentation/bloc/article_bloc.dart';
+import 'package:invonya_mobile/features/presentation/bloc/get_article_topheadlines/get_article_topheadlines_cubit.dart';
 
 import '../core/networks/dio_client.dart';
+import 'data/datasources/article/article_cache.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
   //! Blocs
-  sl.registerFactory(() => ArticleBloc(sl()));
-  // sl.registerFactory(() => AuthCubit(sl(), sl(), sl()));
+  sl.registerFactory(() => GetArticleTopheadlinesCubit(sl()));
 
   ///! Use Cases
   sl.registerLazySingleton(() => GetArticleTopHeadlines(sl()));
 
   //! Repositories
   sl.registerLazySingleton<ArticleRepository>(
-    () => ArticleRepositoryImpl(sl(), sl()),
+    () => ArticleRepositoryImpl(sl(), sl(), sl()),
   );
 
-  //! Datasources Factory
-  // sl.registerLazySingleton(() => ArticleDatasourceFactory(sl(), sl()));
-
   //! Datasources
-  sl.registerLazySingleton<ArticleDatasource>(() => ArticleRemote(sl()));
-  // sl.registerLazySingleton<ArticleDatasource>(() => ArticleCache());
+  sl.registerLazySingleton<ArticleRemoteDatasource>(() => ArticleRemote(sl()));
+  sl.registerLazySingleton<ArticleLoaclDatasource>(() => ArticleCache());
 
   //! Network Info
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));

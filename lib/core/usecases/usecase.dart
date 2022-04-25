@@ -16,7 +16,7 @@ abstract class UseCase<Type, Params> {
 
       if (error is DioError) {
         final res = jsonDecode(error.response.toString());
-        failure =  ServerFailure(message: "${res['message']}");
+        failure = ServerFailure(message: "${res['message']}");
       } else {
         failure = AnotherFailure(message: "$error");
       }

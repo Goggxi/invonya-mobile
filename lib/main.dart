@@ -1,21 +1,25 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:invonya_mobile/features/domain/entities/article.dart';
+import 'package:invonya_mobile/features/presentation/bloc/get_article_topheadlines/get_article_topheadlines_cubit.dart';
+import 'package:invonya_mobile/features/presentation/widget/smartrefresher.dart';
+import 'features/domain/entities/article.dart';
 import 'features/injector.dart' as di;
-import 'features/presentation/bloc/article_bloc.dart';
+import 'features/injector.dart';
 
 void main() async {
-  // SystemChrome.setSystemUIOverlayStyle(
-  //   const SystemUiOverlayStyle(
-  //     statusBarBrightness: Brightness.dark,
-  //     statusBarIconBrightness: Brightness.dark,
-  //     statusBarColor: Colors.transparent,
-  //   ),
-  // );
-  // await SystemChrome.setPreferredOrientations(
-  //   [DeviceOrientation.portraitUp],
-  // );
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarColor: Colors.transparent,
+    ),
+  );
+  await SystemChrome.setPreferredOrientations(
+    [DeviceOrientation.portraitUp],
+  );
   await dotenv.load();
   await di.init();
   runApp(const App());
@@ -27,36 +31,21 @@ class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+    return BlocProvider(
+      create: (context) => sl<GetArticleTopheadlinesCubit>(),
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const MyHomePage(title: 'Flutter Demo Home Page'),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -65,26 +54,67 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  final bloc = di.sl<ArticleBloc>();
+  // final _getArticleTopHeadlines = sl<GetArticleTopHeadlines>();
+  // final List<Article> _articles = [];
+  // final _refreshController = RefreshController(initialRefresh: true);
+  // int _page = 1;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  // void refreshTopHeadlines() {
+  //   _refreshController.resetNoData();
+  //   _articles.clear();
+  //   _page = 1;
+  //   final params = GetTpoHeadlinesParams(
+  //     country: "id",
+  //     pageSize: "7",
+  //     page: _page.toString(),
+  //   );
+  //   _getArticleTopHeadlines.execute(params).listen((event) {
+  //     event.fold(
+  //       (failure) {
+  //         log(failure.message);
+  //         return _refreshController.refreshFailed();
+  //       },
+  //       (response) {
+  //         setState(() {
+  //           _articles.addAll(response);
+  //         });
+  //         return _refreshController.refreshCompleted();
+  //       },
+  //     );
+  //   });
+  // }
 
-  @override
-  void initState() {
-    bloc.fetchTopHeadlines();
-    super.initState();
-  }
+  // void nextTopHeadlines() {
+  //   _page++;
+  //   final params = GetTpoHeadlinesParams(
+  //     country: "id",
+  //     pageSize: "7",
+  //     page: _page.toString(),
+  //   );
+  //   _getArticleTopHeadlines.execute(params).listen((event) {
+  //     event.fold(
+  //       (failure) {
+  //         log(failure.message);
+  //         return _refreshController.loadFailed();
+  //       },
+  //       (response) {
+  //         if (response.isEmpty) {
+  //           return _refreshController.loadNoData();
+  //         }
+  //         setState(() {
+  //           _articles.addAll(response);
+  //         });
+  //         return _refreshController.loadComplete();
+  //       },
+  //     );
+  //   });
+  // }
 
-  @override
-  void dispose() {
-    bloc.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _refreshController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -92,33 +122,56 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: StreamBuilder<List<Article>>(
-          stream: bloc.streamTopHeadlines,
-          builder: (context, snapshot) {
-            final data = snapshot.data;
-            if (snapshot.data != null && data != null) {
-              return ListView.builder(
-                itemBuilder: (context, index) {
-                  final article = data[index];
-                  return Container(
-                    child: Column(
-                      children: [
-                        Image.network(article.urlToImage),
-                        Text(article.source.name),
-                      ],
-                    ),
-                  );
-                },
-                itemCount: snapshot.data!.length,
-              );
-            }
-            return Container();
-          }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      body: BuildSmartRefresher(
+        child: _buildStateArticle(),
+        controller: context.read<GetArticleTopheadlinesCubit>().pagingCtrl,
+        onRefresh: () =>
+            context.read<GetArticleTopheadlinesCubit>().getTopHeadlines(true),
+        onLoading: () =>
+            context.read<GetArticleTopheadlinesCubit>().getTopHeadlines(false),
       ),
+    );
+  }
+
+  Widget _buildStateArticle() {
+    return BlocBuilder<GetArticleTopheadlinesCubit,
+        GetArticleTopheadlinesState>(
+      builder: (context, state) {
+        List<Article> articles = [];
+
+        if (state is GetArticleTopheadlinesWaiting) {
+          articles = state.articles;
+        } else if (state is GetArticleTopheadlinesLoaded) {
+          articles = state.articles;
+        } else if (state is GetArticleTopheadlinesError) {
+          return const Center(
+            child: Text("ERROR"),
+          );
+        }
+
+        return _buildScrollView(articles);
+      },
+    );
+  }
+
+  Widget _buildScrollView(List<Article> articles) {
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(bottom: 12),
+      itemBuilder: (context, index) {
+        final data = articles[index];
+        return Column(
+          children: [
+            Image.network(data.urlToImage),
+            Text(data.source.name),
+          ],
+        );
+      },
+      separatorBuilder: (context, index) {
+        return const SizedBox(height: 8);
+      },
+      itemCount: articles.length,
     );
   }
 }
