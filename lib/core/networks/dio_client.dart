@@ -26,13 +26,13 @@ class CustomInterceptors extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     log('METHOD[${options.method}] => PATH: ${options.baseUrl}${options.path}');
-    log('REQUEST => ${options.data}');
+    log('QUERY => ${options.queryParameters.isEmpty ? "Kosong" : options.queryParameters}');
     return super.onRequest(options, handler);
   }
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    log('RESPONSE[${response.statusCode}] => DATA: ${response.data}');
+    log('RESPONSE[${response.statusCode}] => DATA: ${response.statusMessage}');
     return super.onResponse(response, handler);
   }
 

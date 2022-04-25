@@ -17,7 +17,7 @@ class SourceModel extends Source {
     final String? language,
     final String? country,
   }) : super(
-          id: id,
+          id: id ?? "",
           name: name ?? "",
           description: description ?? "",
           url: url ?? "",
