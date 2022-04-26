@@ -11,24 +11,27 @@ class GetArticleTopheadlinesInitial extends GetArticleTopheadlinesState {}
 
 class GetArticleTopheadlinesLoaded extends GetArticleTopheadlinesState {
   final List<Article> articles;
+  final String country;
 
-  const GetArticleTopheadlinesLoaded(this.articles);
+  const GetArticleTopheadlinesLoaded(this.articles, this.country);
 
   @override
-  List<Object> get props => [articles];
+  List<Object> get props => [articles, country];
 }
 
 class GetArticleTopheadlinesWaiting extends GetArticleTopheadlinesState {
   final List<Article> articles;
-  final bool isFirstFetch;
+  final String country;
 
   const GetArticleTopheadlinesWaiting(
-    this.articles, {
-    this.isFirstFetch = false,
-  });
+    this.articles,
+    this.country,
+  );
 
   @override
-  List<Object> get props => [articles];
+  List<Object> get props => [articles, country];
 }
+
+class GetArticleTopheadlinesReset extends GetArticleTopheadlinesState {}
 
 class GetArticleTopheadlinesError extends GetArticleTopheadlinesState {}

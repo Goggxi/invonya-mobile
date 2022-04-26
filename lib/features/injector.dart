@@ -7,7 +7,7 @@ import 'package:invonya_mobile/features/data/datasources/article/article_remote.
 import 'package:invonya_mobile/features/data/repositories/article_repository_impl.dart';
 import 'package:invonya_mobile/features/domain/repositories/article_repositoty.dart';
 import 'package:invonya_mobile/features/domain/usecases/get_article_topheadlines.dart';
-import 'package:invonya_mobile/features/presentation/bloc/get_article_topheadlines/get_article_topheadlines_cubit.dart';
+import 'package:invonya_mobile/features/presentation/blocs/get_article_topheadlines/get_article_topheadlines_cubit.dart';
 
 import '../core/networks/dio_client.dart';
 import 'data/datasources/article/article_cache.dart';

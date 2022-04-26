@@ -16,8 +16,9 @@ class GetArticleTopheadlinesCubit extends Cubit<GetArticleTopheadlinesState> {
   GetArticleTopheadlinesCubit(this._articleTopHeadlines)
       : super(GetArticleTopheadlinesInitial());
 
-  void getTopHeadlines(bool onRefresh) {
+  void getTopHeadlines(bool onRefresh, String country) {
     final _currentState = state;
+    final _paramsCountry = country.isNotEmpty ? country : "id";
 
     if (onRefresh) {
       pagingCtrl.resetNoData();
@@ -27,27 +28,33 @@ class GetArticleTopheadlinesCubit extends Cubit<GetArticleTopheadlinesState> {
     }
 
     final params = GetTpoHeadlinesParams(
-      country: "id",
+      country: _paramsCountry,
+      category: "general",
       pageSize: "10",
       page: _page.toString(),
     );
 
     var _oldPosts = <Article>[];
+    var _oldCountry = _paramsCountry;
     if (_currentState is GetArticleTopheadlinesLoaded) {
       _oldPosts = _currentState.articles;
+      _oldCountry = _currentState.country;
     }
 
-    emit(GetArticleTopheadlinesWaiting(_oldPosts));
+    emit(GetArticleTopheadlinesWaiting(_oldPosts, _oldCountry));
 
+    if (onRefresh) {
+      emit(GetArticleTopheadlinesReset());
+    }
     _articleTopHeadlines.execute(params).listen((event) {
       event.fold(
         (failure) {
           if (onRefresh) {
-            log("FAILURE BLOC R -> " + failure.message);
+            log("FAILURE ARTICLE REFRESH -> " + failure.message);
             emit(GetArticleTopheadlinesError());
             return pagingCtrl.refreshFailed();
           } else {
-            log("FAILURE BLOC N -> " + failure.message);
+            log("FAILURE ARTICLE NEXT -> " + failure.message);
             emit(GetArticleTopheadlinesError());
             pagingCtrl.loadFailed();
             return pagingCtrl.loadNoData();
@@ -55,7 +62,7 @@ class GetArticleTopheadlinesCubit extends Cubit<GetArticleTopheadlinesState> {
         },
         (response) {
           if (onRefresh) {
-            emit(GetArticleTopheadlinesLoaded(response));
+            emit(GetArticleTopheadlinesLoaded(response, _paramsCountry));
             return pagingCtrl.refreshCompleted();
           } else {
             if (response.isEmpty) {
@@ -64,7 +71,7 @@ class GetArticleTopheadlinesCubit extends Cubit<GetArticleTopheadlinesState> {
               final _articles =
                   (state as GetArticleTopheadlinesWaiting).articles;
               _articles.addAll(response);
-              emit(GetArticleTopheadlinesLoaded(_articles));
+              emit(GetArticleTopheadlinesLoaded(_articles, _paramsCountry));
               return pagingCtrl.loadComplete();
             }
           }

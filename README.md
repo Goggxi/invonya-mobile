@@ -21,11 +21,11 @@ DEMO APP FOR ANDROID [download]()
 ## Core - Package
 
 - Http Client - [dio](https://pub.dev/packages/dio)
-- Service Locator [get_it](https://pub.dev/packages/get_it)
-- Comparison Object [equatable](https://pub.dev/packages/equatable)
-- Functional Programming [dartz](https://pub.dev/packages/dartz)
-- Asynchronous Programming [rxdart](https://pub.dev/packages/rxdart)
-- State Management [flutter-bloc](https://pub.dev/packages/flutter_bloc)
+- Service Locator - [get_it](https://pub.dev/packages/get_it)
+- Comparison Object - [equatable](https://pub.dev/packages/equatable)
+- Functional Programming - [dartz](https://pub.dev/packages/dartz)
+- Asynchronous Programming - [rxdart](https://pub.dev/packages/rxdart)
+- State Management = [flutter-bloc](https://pub.dev/packages/flutter_bloc)
 
 ## Owner
 

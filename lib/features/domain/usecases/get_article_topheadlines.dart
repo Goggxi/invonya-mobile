@@ -17,11 +17,13 @@ class GetArticleTopHeadlines extends UseCase<List<Article>, GetTpoHeadlinesParam
 
 class GetTpoHeadlinesParams extends Equatable{
   final String country;
+  final String category;
   final String pageSize;
   final String page;
 
   const GetTpoHeadlinesParams({
     required this.country,
+    required this.category,
     required this.pageSize,
     required this.page,
   });
