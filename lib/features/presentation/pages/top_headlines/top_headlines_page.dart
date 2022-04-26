@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:invonya_mobile/core/data/article_support_categories.dart';
 import 'package:invonya_mobile/core/data/article_support_countries.dart';
+import 'package:invonya_mobile/features/presentation/pages/top_headlines/top_headlines_category_page.dart';
 import 'package:invonya_mobile/features/presentation/widgets/images.dart';
 
 import '../../../domain/entities/article.dart';
@@ -12,7 +14,7 @@ class TopHeadlinesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void _showListCounties(BuildContext context) {
+    void _showListCounties() {
       showDialog(
         context: context,
         builder: (_) {
@@ -43,10 +45,10 @@ class TopHeadlinesPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Top Headline"),
+        title: const Text("Invonya"),
         actions: [
           TextButton(
-            onPressed: () => _showListCounties(context),
+            onPressed: () => _showListCounties(),
             child: Row(
               children: [
                 const Icon(Icons.arrow_drop_down_rounded),
@@ -117,29 +119,77 @@ class TopHeadlinesPage extends StatelessWidget {
           );
         }
 
-        return _buildListArticle(articles);
+        return _buildCustomScrollView(articles);
       },
     );
   }
 
-  Widget _buildListArticle(List<Article> articles) {
-    return ListView.separated(
+  Widget _buildCustomScrollView(List<Article> articles) {
+    return CustomScrollView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.only(bottom: 12),
-      itemBuilder: (context, index) {
-        final data = articles[index];
-        return Column(
-          children: [
-            BuildImagePrimary(imageUrl: data.urlToImage),
-            Text(data.source.name),
-          ],
-        );
-      },
-      separatorBuilder: (context, index) {
-        return const SizedBox(height: 8);
-      },
-      itemCount: articles.length,
+      slivers: [
+        _buildListCategory(),
+        _buildListArticle(articles),
+      ],
+    );
+  }
+
+  Widget _buildListCategory() {
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: 80,
+        child: ListView.separated(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            final data = categories[index];
+            return Card(
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return const TopHeadlinesCategoryPage();
+                    },
+                  ));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Icon(data.iconData),
+                      const Spacer(),
+                      Text(data.name),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+          separatorBuilder: (context, index) => Container(),
+          itemCount: categories.length,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildListArticle(List<Article> articles) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final data = articles[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Column(
+              children: [
+                BuildImagePrimary(imageUrl: data.urlToImage),
+                Text(data.source.name),
+              ],
+            ),
+          );
+        },
+        childCount: articles.length,
+      ),
     );
   }
 }

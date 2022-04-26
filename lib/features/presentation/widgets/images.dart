@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -21,10 +22,18 @@ class BuildImagePrimary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const String assetName = 'assets/images/dimg.svg';
+    String urlFinal = "${dotenv.env['IMG_URL']}";
+    if (imageUrl.startsWith("https://")) {
+      urlFinal = imageUrl;
+    } else if (imageUrl.startsWith("http://")) {
+      urlFinal = imageUrl;
+    } else {
+      urlFinal = "${dotenv.env['IMG_URL']}";
+    }
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius ?? 0),
       child: CachedNetworkImage(
-        imageUrl: imageUrl,
+        imageUrl: urlFinal,
         width: width,
         height: height,
         fit: fit ?? BoxFit.cover,
