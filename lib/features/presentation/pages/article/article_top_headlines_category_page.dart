@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invonya_mobile/core/data/article_support_categories.dart';
 import 'package:invonya_mobile/features/presentation/blocs/get_article_topheadlines_category/get_article_topheadlines_category_cubit.dart';
-import 'package:invonya_mobile/features/presentation/widgets/images.dart';
 
 import '../../../domain/entities/article.dart';
 import '../../widgets/smartrefresher.dart';
+import 'article_detail_page.dart';
+import 'article_item_widget.dart';
 
-class TopHeadlinesCategoryPage extends StatelessWidget {
+class ArticleTopHeadlinesCategoryPage extends StatelessWidget {
   final Category category;
   final String country;
-  const TopHeadlinesCategoryPage({
+  const ArticleTopHeadlinesCategoryPage({
     Key? key,
     required this.category,
     required this.country,
@@ -69,12 +70,15 @@ class TopHeadlinesCategoryPage extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        final data = articles[index];
-        return Column(
-          children: [
-            BuildImagePrimary(imageUrl: data.urlToImage),
-            Text(data.source.name),
-          ],
+        return BuildArticleItem(
+          article: articles[index],
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return ArticleDetailPage(article: articles[index]);
+              },
+            ));
+          },
         );
       },
       separatorBuilder: (context, index) => Container(),

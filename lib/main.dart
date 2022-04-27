@@ -13,9 +13,7 @@ void main() async {
       statusBarColor: Colors.transparent,
     ),
   );
-  await SystemChrome.setPreferredOrientations(
-    [DeviceOrientation.portraitUp],
-  );
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await dotenv.load();
   await di.init();
   runApp(const InvonyaApp());

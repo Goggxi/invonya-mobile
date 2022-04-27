@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:invonya_mobile/core/data/article_support_categories.dart';
 import 'package:invonya_mobile/core/data/article_support_countries.dart';
-import 'package:invonya_mobile/features/presentation/pages/top_headlines/top_headlines_category_page.dart';
-import 'package:invonya_mobile/features/presentation/widgets/images.dart';
+import 'package:invonya_mobile/core/utils/colors.dart';
+import 'package:invonya_mobile/features/presentation/pages/article/article_item_widget.dart';
 
 import '../../../domain/entities/article.dart';
 import '../../blocs/get_article_topheadlines/get_article_topheadlines_cubit.dart';
 import '../../widgets/smartrefresher.dart';
+import 'article_detail_page.dart';
+import 'article_top_headlines_category_page.dart';
 
-class TopHeadlinesPage extends StatelessWidget {
-  const TopHeadlinesPage({Key? key}) : super(key: key);
+class ArticleTopHeadlinesPage extends StatelessWidget {
+  const ArticleTopHeadlinesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +47,14 @@ class TopHeadlinesPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Invonya"),
+        title: Text(
+          "Invonya",
+          style: TextStyle(
+            fontFamily: "Lobster",
+            fontSize: 26,
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () => _showListCounties(),
@@ -65,9 +74,6 @@ class TopHeadlinesPage extends StatelessWidget {
                   },
                 ),
               ],
-            ),
-            style: TextButton.styleFrom(
-              primary: Colors.white,
             ),
           )
         ],
@@ -129,42 +135,82 @@ class TopHeadlinesPage extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       slivers: [
+        _buildTitle("Kategori"),
         _buildListCategory(country),
+        _buildTitle("Sedang Trending"),
         _buildListArticle(articles),
       ],
+    );
+  }
+
+  Widget _buildTitle(String title) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Text(
+          title,
+          style: const TextStyle(
+            fontFamily: "Lobster",
+            fontSize: 16,
+            color: Colors.black54,
+          ),
+        ),
+      ),
     );
   }
 
   Widget _buildListCategory(String country) {
     return SliverToBoxAdapter(
       child: SizedBox(
-        height: 72,
+        height: 120,
         child: ListView.separated(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
             final data = categories[index];
             return Card(
+              clipBehavior: Clip.hardEdge,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: InkWell(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (context) {
-                      return TopHeadlinesCategoryPage(
+                      return ArticleTopHeadlinesCategoryPage(
                         category: data,
                         country: country,
                       );
                     },
                   ));
                 },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Icon(data.iconData),
-                      const Spacer(),
-                      Text(data.name),
-                    ],
-                  ),
+                child: Stack(
+                  children: [
+                    Image.asset(
+                      data.image,
+                      height: 120,
+                      width: 120,
+                      fit: BoxFit.cover,
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      child: Container(
+                        width: 120,
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        color: Colors.black38,
+                        child: Text(
+                          data.name,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2
+                              ?.copyWith(
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             );
@@ -180,15 +226,15 @@ class TopHeadlinesPage extends StatelessWidget {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          final data = articles[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              children: [
-                BuildImagePrimary(imageUrl: data.urlToImage),
-                Text(data.source.name),
-              ],
-            ),
+          return BuildArticleItem(
+            article: articles[index],
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return ArticleDetailPage(article: articles[index]);
+                },
+              ));
+            },
           );
         },
         childCount: articles.length,

@@ -9,6 +9,7 @@ DEMO APP FOR ANDROID [download]()
 - [x] Support Offline/Online Application
 - [x] Bookmark News
 - [x] Pagination
+- [x] Support Indonesia Location
 
 ## Sources
 
