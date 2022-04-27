@@ -17,6 +17,7 @@ class ArticleRemote implements ArticleRemoteDatasource {
       _topHeadlines,
       queryParameters: {
         "country": params.country,
+        "category": params.category,
         "pageSize": params.pageSize,
         "page": params.page,
       },

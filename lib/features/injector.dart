@@ -8,6 +8,7 @@ import 'package:invonya_mobile/features/data/repositories/article_repository_imp
 import 'package:invonya_mobile/features/domain/repositories/article_repositoty.dart';
 import 'package:invonya_mobile/features/domain/usecases/get_article_topheadlines.dart';
 import 'package:invonya_mobile/features/presentation/blocs/get_article_topheadlines/get_article_topheadlines_cubit.dart';
+import 'package:invonya_mobile/features/presentation/blocs/get_article_topheadlines_category/get_article_topheadlines_category_cubit.dart';
 
 import '../core/networks/dio_client.dart';
 import 'data/datasources/article/article_cache.dart';
@@ -17,6 +18,7 @@ final sl = GetIt.instance;
 Future<void> init() async {
   //! Blocs
   sl.registerFactory(() => GetArticleTopheadlinesCubit(sl()));
+  sl.registerFactory(() => GetArticleTopheadlinesCategoryCubit(sl()));
 
   ///! Use Cases
   sl.registerLazySingleton(() => GetArticleTopHeadlines(sl()));

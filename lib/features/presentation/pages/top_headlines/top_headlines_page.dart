@@ -89,7 +89,7 @@ class TopHeadlinesPage extends StatelessWidget {
 
   Widget _buildPagingArticle(BuildContext context, String country) {
     return BuildSmartRefresher(
-      child: _buildStateArticle(),
+      child: _buildStateArticle(country),
       controller: context.read<GetArticleTopheadlinesCubit>().pagingCtrl,
       onRefresh: () => context
           .read<GetArticleTopheadlinesCubit>()
@@ -100,7 +100,7 @@ class TopHeadlinesPage extends StatelessWidget {
     );
   }
 
-  Widget _buildStateArticle() {
+  Widget _buildStateArticle(String country) {
     return BlocBuilder<GetArticleTopheadlinesCubit,
         GetArticleTopheadlinesState>(
       builder: (context, state) {
@@ -119,26 +119,26 @@ class TopHeadlinesPage extends StatelessWidget {
           );
         }
 
-        return _buildCustomScrollView(articles);
+        return _buildCustomScrollView(articles, country);
       },
     );
   }
 
-  Widget _buildCustomScrollView(List<Article> articles) {
+  Widget _buildCustomScrollView(List<Article> articles, String country) {
     return CustomScrollView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       slivers: [
-        _buildListCategory(),
+        _buildListCategory(country),
         _buildListArticle(articles),
       ],
     );
   }
 
-  Widget _buildListCategory() {
+  Widget _buildListCategory(String country) {
     return SliverToBoxAdapter(
       child: SizedBox(
-        height: 80,
+        height: 72,
         child: ListView.separated(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           scrollDirection: Axis.horizontal,
@@ -149,7 +149,10 @@ class TopHeadlinesPage extends StatelessWidget {
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (context) {
-                      return const TopHeadlinesCategoryPage();
+                      return TopHeadlinesCategoryPage(
+                        category: data,
+                        country: country,
+                      );
                     },
                   ));
                 },
