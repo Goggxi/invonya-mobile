@@ -82,9 +82,11 @@ class BuildArticleItem extends StatelessWidget {
                         children: [
                           const Icon(Icons.account_circle_rounded),
                           const SizedBox(width: 2),
-                          Text(
-                            article.author,
-                            style: Theme.of(context).textTheme.caption,
+                          Flexible(
+                            child: Text(
+                              article.author,
+                              style: Theme.of(context).textTheme.caption,
+                            ),
                           ),
                           const SizedBox(width: 12),
                         ],

@@ -46,50 +46,58 @@ class ArticleTopHeadlinesPage extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Invonya",
-          style: TextStyle(
-            fontFamily: "Lobster",
-            fontSize: 26,
-            color: Theme.of(context).primaryColor,
-          ),
+      appBar: _buildAppBar(context, () => _showListCounties()),
+      body: _buildBody(),
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context, void Function() onPressed) {
+    return AppBar(
+      title: Text(
+        "Invonya",
+        style: TextStyle(
+          fontFamily: "Lobster",
+          fontSize: 26,
+          color: Theme.of(context).primaryColor,
         ),
-        actions: [
-          TextButton(
-            onPressed: () => _showListCounties(),
-            child: Row(
-              children: [
-                const Icon(Icons.arrow_drop_down_rounded),
-                BlocBuilder<GetArticleTopheadlinesCubit,
-                    GetArticleTopheadlinesState>(
-                  builder: (context, state) {
-                    String _country = '';
-                    if (state is GetArticleTopheadlinesWaiting) {
-                      _country = state.country;
-                    } else if (state is GetArticleTopheadlinesLoaded) {
-                      _country = state.country;
-                    }
-                    return Text(_country);
-                  },
-                ),
-              ],
-            ),
-          )
-        ],
       ),
-      body:
-          BlocBuilder<GetArticleTopheadlinesCubit, GetArticleTopheadlinesState>(
-        builder: (context, state) {
-          String _country = '';
-          if (state is GetArticleTopheadlinesWaiting) {
-            _country = state.country;
-          } else if (state is GetArticleTopheadlinesLoaded) {
-            _country = state.country;
-          }
-          return _buildPagingArticle(context, _country);
-        },
-      ),
+      actions: [
+        TextButton(
+          onPressed: onPressed,
+          child: Row(
+            children: [
+              const Icon(Icons.arrow_drop_down_rounded),
+              BlocBuilder<GetArticleTopheadlinesCubit,
+                  GetArticleTopheadlinesState>(
+                builder: (context, state) {
+                  String _country = '';
+                  if (state is GetArticleTopheadlinesWaiting) {
+                    _country = state.country;
+                  } else if (state is GetArticleTopheadlinesLoaded) {
+                    _country = state.country;
+                  }
+                  return Text(_country);
+                },
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildBody() {
+    return BlocBuilder<GetArticleTopheadlinesCubit,
+        GetArticleTopheadlinesState>(
+      builder: (context, state) {
+        String _country = '';
+        if (state is GetArticleTopheadlinesWaiting) {
+          _country = state.country;
+        } else if (state is GetArticleTopheadlinesLoaded) {
+          _country = state.country;
+        }
+        return _buildPagingArticle(context, _country);
+      },
     );
   }
 
@@ -112,7 +120,11 @@ class ArticleTopHeadlinesPage extends StatelessWidget {
       builder: (context, state) {
         List<Article> articles = [];
 
-        if (state is GetArticleTopheadlinesReset) {
+        if (state is GetArticleTopheadlinesInitial) {
+          return const Center(
+            child: Text("INITIAL"),
+          );
+        } else if (state is GetArticleTopheadlinesReset) {
           articles.clear();
           return const Center(child: CircularProgressIndicator());
         } else if (state is GetArticleTopheadlinesWaiting) {
@@ -130,7 +142,10 @@ class ArticleTopHeadlinesPage extends StatelessWidget {
     );
   }
 
-  Widget _buildCustomScrollView(List<Article> articles, String country) {
+  CustomScrollView _buildCustomScrollView(
+    List<Article> articles,
+    String country,
+  ) {
     return CustomScrollView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -143,7 +158,7 @@ class ArticleTopHeadlinesPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTitle(String title) {
+  SliverToBoxAdapter _buildTitle(String title) {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -159,7 +174,7 @@ class ArticleTopHeadlinesPage extends StatelessWidget {
     );
   }
 
-  Widget _buildListCategory(String country) {
+  SliverToBoxAdapter _buildListCategory(String country) {
     return SliverToBoxAdapter(
       child: SizedBox(
         height: 120,
@@ -167,53 +182,7 @@ class ArticleTopHeadlinesPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
-            final data = categories[index];
-            return Card(
-              clipBehavior: Clip.hardEdge,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (context) {
-                      return ArticleTopHeadlinesCategoryPage(
-                        category: data,
-                        country: country,
-                      );
-                    },
-                  ));
-                },
-                child: Stack(
-                  children: [
-                    Image.asset(
-                      data.image,
-                      height: 120,
-                      width: 120,
-                      fit: BoxFit.cover,
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      child: Container(
-                        width: 120,
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        color: Colors.black38,
-                        child: Text(
-                          data.name,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText2
-                              ?.copyWith(
-                                  color: AppColors.white,
-                                  fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
+            return _buildCardItemCategory(context, categories[index], country);
           },
           separatorBuilder: (context, index) => Container(),
           itemCount: categories.length,
@@ -222,7 +191,56 @@ class ArticleTopHeadlinesPage extends StatelessWidget {
     );
   }
 
-  Widget _buildListArticle(List<Article> articles) {
+  Card _buildCardItemCategory(
+    BuildContext context,
+    Category category,
+    String country,
+  ) {
+    return Card(
+      clipBehavior: Clip.hardEdge,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) {
+              return ArticleTopHeadlinesCategoryPage(
+                category: category,
+                country: country,
+              );
+            },
+          ));
+        },
+        child: Stack(
+          children: [
+            Image.asset(
+              category.image,
+              height: 120,
+              width: 120,
+              fit: BoxFit.cover,
+            ),
+            Positioned(
+              bottom: 0,
+              child: Container(
+                width: 120,
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                color: Colors.black38,
+                child: Text(
+                  category.name,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                      color: AppColors.white, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  SliverList _buildListArticle(List<Article> articles) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {

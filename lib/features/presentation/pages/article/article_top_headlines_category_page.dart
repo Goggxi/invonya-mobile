@@ -23,11 +23,11 @@ class ArticleTopHeadlinesCategoryPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(category.name),
       ),
-      body: _buildPagingArticle(context),
+      body: _buildBody(context),
     );
   }
 
-  Widget _buildPagingArticle(BuildContext context) {
+  Widget _buildBody(BuildContext context) {
     return BuildSmartRefresher(
       child: _buildStateArticle(),
       controller:
