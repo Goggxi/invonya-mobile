@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:invonya_mobile/config/theme/app_themes.dart';
 import 'package:invonya_mobile/core/functions/extension_function.dart';
 import 'package:invonya_mobile/features/domain/entities/article.dart';
+import 'package:invonya_mobile/features/presentation/pages/webview/webview_page.dart';
 import 'package:invonya_mobile/features/presentation/widgets/images.dart';
 
 import '../../../../core/utils/colors.dart';
@@ -103,8 +104,10 @@ class ArticleDetailPage extends StatelessWidget {
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 10),
-                    Text(article.content,
-                        style: Theme.of(context).textTheme.bodyText2),
+                    Text(
+                      article.content,
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
                   ],
                 ),
               ),
@@ -116,7 +119,13 @@ class ArticleDetailPage extends StatelessWidget {
             height: 42,
             width: MediaQuery.of(context).size.width,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return BuildWebView(url: article.url);
+                  },
+                ));
+              },
               child: const Text("Baca selengkapnya"),
               style: ElevatedButton.styleFrom(
                 shape: const StadiumBorder(),

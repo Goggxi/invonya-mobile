@@ -46,6 +46,7 @@ dependencies:
 
   # Another
   flutter_dotenv: ^5.0.2
+  webview_flutter: ^3.0.2
 
   # Fork 
   data_connection_checker:
