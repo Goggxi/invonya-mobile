@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:invonya_mobile/core/functions/extension_function.dart';
-import 'package:invonya_mobile/features/domain/entities/article.dart';
+import 'package:invonya_mobile/core/core.dart';
 
-import '../../../../core/utils/colors.dart';
-import '../../widgets/images.dart';
+import '../../../../domain/entities/entites.dart';
+import '../../../presentation.dart';
 
-class BuildArticleItem extends StatelessWidget {
+class WidgetArticleItem extends StatelessWidget {
   final Article article;
   final void Function() onTap;
-  const BuildArticleItem({Key? key, required this.article, required this.onTap})
+  const WidgetArticleItem(
+      {Key? key, required this.article, required this.onTap})
       : super(key: key);
 
   @override
@@ -21,7 +21,7 @@ class BuildArticleItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BuildImagePrimary(
+            WidgetImagePrimary(
               imageUrl: article.urlToImage,
               width: MediaQuery.of(context).size.width,
               radius: 12,

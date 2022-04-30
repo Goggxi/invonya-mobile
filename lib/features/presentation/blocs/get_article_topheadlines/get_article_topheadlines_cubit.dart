@@ -2,9 +2,10 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:invonya_mobile/features/domain/entities/article.dart';
-import 'package:invonya_mobile/features/domain/usecases/get_article_topheadlines.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import '../../../../core/core.dart';
+import '../../../domain/domain.dart';
 
 part 'get_article_topheadlines_state.dart';
 
@@ -27,7 +28,7 @@ class GetArticleTopheadlinesCubit extends Cubit<GetArticleTopheadlinesState> {
       _page++;
     }
 
-    final params = GetTpoHeadlinesParams(
+    final params = GetTopHeadlinesParams(
       country: _paramsCountry,
       category: "general",
       pageSize: "10",

@@ -4,8 +4,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../../domain/entities/article.dart';
-import '../../../domain/usecases/get_article_topheadlines.dart';
+import '../../../../core/core.dart';
+import '../../../domain/domain.dart';
+
 
 part 'get_article_topheadlines_category_state.dart';
 
@@ -32,7 +33,7 @@ class GetArticleTopheadlinesCategoryCubit
       _page++;
     }
 
-    final params = GetTpoHeadlinesParams(
+    final params = GetTopHeadlinesParams(
       country: country.isNotEmpty ? country : "id",
       category: category,
       pageSize: "10",

@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:invonya_mobile/config/theme/app_themes.dart';
-import 'package:invonya_mobile/core/functions/extension_function.dart';
-import 'package:invonya_mobile/features/domain/entities/article.dart';
-import 'package:invonya_mobile/features/presentation/pages/webview/webview_page.dart';
-import 'package:invonya_mobile/features/presentation/widgets/images.dart';
+import 'package:invonya_mobile/core/core.dart';
 
-import '../../../../core/utils/colors.dart';
+import '../../../../config/config.dart';
+import '../../../features.dart';
 
-class ArticleDetailPage extends StatelessWidget {
+class PageArticleDetail extends StatelessWidget {
   final Article article;
-  const ArticleDetailPage({Key? key, required this.article}) : super(key: key);
+  const PageArticleDetail({Key? key, required this.article}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +25,7 @@ class ArticleDetailPage extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              BuildImagePrimary(imageUrl: article.urlToImage),
+              WidgetImagePrimary(imageUrl: article.urlToImage),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Column(

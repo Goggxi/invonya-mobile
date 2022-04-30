@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:invonya_mobile/core/data/article_support_categories.dart';
-import 'package:invonya_mobile/core/data/article_support_countries.dart';
-import 'package:invonya_mobile/core/utils/colors.dart';
-import 'package:invonya_mobile/features/presentation/pages/article/article_item_widget.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../domain/entities/article.dart';
-import '../../blocs/get_article_topheadlines/get_article_topheadlines_cubit.dart';
-import '../../widgets/smartrefresher.dart';
-import 'article_detail_page.dart';
-import 'article_top_headlines_category_page.dart';
+import '../../../../core/core.dart';
+import '../../../domain/entities/entites.dart';
+import '../../presentation.dart';
+import 'widgets/widgets.dart';
 
-class ArticleTopHeadlinesPage extends StatelessWidget {
-  const ArticleTopHeadlinesPage({Key? key}) : super(key: key);
+class PageArticleTopHeadlines extends StatelessWidget {
+  const PageArticleTopHeadlines({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +24,27 @@ class ArticleTopHeadlinesPage extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: countries.length,
                 itemBuilder: (__, index) {
-                  return ListTile(
-                    title: Text(countries[index].name),
+                  return InkWell(
+                    child: Row(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: SvgPicture.asset(
+                            countries[index].image,
+                            height: 24,
+                            width: 34,
+                            semanticsLabel: 'image-flags',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(countries[index].name),
+                      ],
+                    ),
                     onTap: () {
                       Navigator.pop(__);
                       __
@@ -38,6 +53,7 @@ class ArticleTopHeadlinesPage extends StatelessWidget {
                     },
                   );
                 },
+                // separatorBuilder: (_, __) => const SizedBox(height: 0),
               ),
             ),
           );
@@ -66,7 +82,6 @@ class ArticleTopHeadlinesPage extends StatelessWidget {
           onPressed: onPressed,
           child: Row(
             children: [
-              const Icon(Icons.arrow_drop_down_rounded),
               BlocBuilder<GetArticleTopheadlinesCubit,
                   GetArticleTopheadlinesState>(
                 builder: (context, state) {
@@ -76,7 +91,24 @@ class ArticleTopHeadlinesPage extends StatelessWidget {
                   } else if (state is GetArticleTopheadlinesLoaded) {
                     _country = state.country;
                   }
-                  return Text(_country);
+
+                  return _country.isEmpty
+                      ? Container()
+                      : Row(
+                          children: [
+                            const Icon(Icons.arrow_drop_down_rounded),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              child: SvgPicture.asset(
+                                "assets/images/$_country.svg",
+                                height: 24,
+                                width: 34,
+                                semanticsLabel: 'image-flags',
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          ],
+                        );
                 },
               ),
             ],
@@ -102,7 +134,7 @@ class ArticleTopHeadlinesPage extends StatelessWidget {
   }
 
   Widget _buildPagingArticle(BuildContext context, String country) {
-    return BuildSmartRefresher(
+    return WidgetPaging(
       child: _buildStateArticle(country),
       controller: context.read<GetArticleTopheadlinesCubit>().pagingCtrl,
       onRefresh: () => context
@@ -205,7 +237,7 @@ class ArticleTopHeadlinesPage extends StatelessWidget {
         onTap: () {
           Navigator.push(context, MaterialPageRoute(
             builder: (context) {
-              return ArticleTopHeadlinesCategoryPage(
+              return PageArticleTopHeadlinesCategory(
                 category: category,
                 country: country,
               );
@@ -244,12 +276,12 @@ class ArticleTopHeadlinesPage extends StatelessWidget {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          return BuildArticleItem(
+          return WidgetArticleItem(
             article: articles[index],
             onTap: () {
               Navigator.push(context, MaterialPageRoute(
                 builder: (context) {
-                  return ArticleDetailPage(article: articles[index]);
+                  return PageArticleDetail(article: articles[index]);
                 },
               ));
             },

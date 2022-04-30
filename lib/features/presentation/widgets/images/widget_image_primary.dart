@@ -3,14 +3,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class BuildImagePrimary extends StatelessWidget {
+class WidgetImagePrimary extends StatelessWidget {
   final String imageUrl;
   final double? width;
   final double? height;
   final double? radius;
   final BoxFit? fit;
 
-  const BuildImagePrimary({
+  const WidgetImagePrimary({
     Key? key,
     this.height,
     this.width,

@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:invonya_mobile/core/data/article_support_categories.dart';
-import 'package:invonya_mobile/features/presentation/blocs/get_article_topheadlines_category/get_article_topheadlines_category_cubit.dart';
 
-import '../../../domain/entities/article.dart';
-import '../../widgets/smartrefresher.dart';
-import 'article_detail_page.dart';
-import 'article_item_widget.dart';
+import '../../../../core/core.dart';
+import '../../../features.dart';
+import 'widgets/widgets.dart';
 
-class ArticleTopHeadlinesCategoryPage extends StatelessWidget {
+class PageArticleTopHeadlinesCategory extends StatelessWidget {
   final Category category;
   final String country;
-  const ArticleTopHeadlinesCategoryPage({
+  const PageArticleTopHeadlinesCategory({
     Key? key,
     required this.category,
     required this.country,
@@ -28,7 +25,7 @@ class ArticleTopHeadlinesCategoryPage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    return BuildSmartRefresher(
+    return WidgetPaging(
       child: _buildStateArticle(),
       controller:
           context.read<GetArticleTopheadlinesCategoryCubit>().pagingCtrl,
@@ -70,12 +67,12 @@ class ArticleTopHeadlinesCategoryPage extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        return BuildArticleItem(
+        return WidgetArticleItem(
           article: articles[index],
           onTap: () {
             Navigator.push(context, MaterialPageRoute(
               builder: (context) {
-                return ArticleDetailPage(article: articles[index]);
+                return PageArticleDetail(article: articles[index]);
               },
             ));
           },

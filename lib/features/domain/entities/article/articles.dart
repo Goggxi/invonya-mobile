@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:invonya_mobile/features/domain/entities/article.dart';
+
+import 'article.dart';
 
 class Articles extends Equatable {
   final String status;

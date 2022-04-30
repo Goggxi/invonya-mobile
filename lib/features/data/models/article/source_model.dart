@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:invonya_mobile/features/domain/entities/source.dart';
+import '../../../features.dart';
 
 SourceModel sourceModelFromJson(String str) =>
     SourceModel.fromJson(json.decode(str));

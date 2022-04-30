@@ -1,5 +1,4 @@
-import 'package:invonya_mobile/features/data/models/source_model.dart';
-import 'package:invonya_mobile/features/domain/entities/article.dart';
+import '../../../features.dart';
 
 class ArticleModel extends Article {
   ArticleModel({

@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:dartz/dartz.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../error/failure.dart';
+import '../error/failure/failure.dart';
 
 abstract class UseCase<Type, Params> {
   Stream<Either<Failure, Type>> build(Params params);

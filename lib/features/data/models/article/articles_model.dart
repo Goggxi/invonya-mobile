@@ -1,8 +1,6 @@
 import 'dart:convert';
 
-import 'package:invonya_mobile/features/domain/entities/articles.dart';
-
-import 'article_model.dart';
+import '../../../features.dart';
 
 ArticlesModel articlesModelFromJson(String str) =>
     ArticlesModel.fromJson(json.decode(str));

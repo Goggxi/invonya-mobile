@@ -68,6 +68,7 @@ flutter:
   assets:
     - .env
     - assets/images/
+    # - assets/images/bendera
     # - assets/animations/
   
   fonts:

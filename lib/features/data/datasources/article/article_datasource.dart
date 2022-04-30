@@ -1,8 +1,8 @@
-import 'package:invonya_mobile/features/domain/entities/article.dart';
-import 'package:invonya_mobile/features/domain/usecases/get_article_topheadlines.dart';
+import '../../../../core/core.dart';
+import '../../../features.dart';
 
 abstract class ArticleRemoteDatasource {
-  Future<List<Article>> getTopHeadlines(GetTpoHeadlinesParams params);
+  Future<List<Article>> getTopHeadlines(GetTopHeadlinesParams params);
 }
 
 abstract class ArticleLoaclDatasource {

@@ -1,5 +1,4 @@
-import 'package:invonya_mobile/features/data/datasources/article/article_datasource.dart';
-import 'package:invonya_mobile/features/domain/entities/article.dart';
+import '../../../features.dart';
 
 class ArticleCache implements ArticleLoaclDatasource {
   @override

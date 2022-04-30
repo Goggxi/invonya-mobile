@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class BuildSmartRefresher extends StatelessWidget {
+class WidgetPaging extends StatelessWidget {
   final RefreshController controller;
   final void Function() onRefresh;
   final void Function() onLoading;
   final Widget child;
-  const BuildSmartRefresher({
+  const WidgetPaging({
     Key? key,
     required this.controller,
     required this.onRefresh,
